@@ -159,6 +159,40 @@ extern crate test;
 use std::collections::HashMap;
 use test::Bencher;
 
+#[test]
+fn test_table_insert() {
+  let mut table = OpenIndexTable::new();
+  table.insert(1, 2);
+  table.insert(2, 3);
+  table.insert(3, 4);
+  table.insert(4, 5);
+  assert_eq!(table.get(1), (2, true));
+  assert_eq!(table.get(2), (3, true));
+  assert_eq!(table.get(3), (4, true));
+  assert_eq!(table.get(4), (5, true));
+}
+
+#[test]
+fn test_table_delete() {
+  let mut table = OpenIndexTable::new();
+  table.insert(1, 2);
+  table.insert(2, 3);
+  table.insert(3, 4);
+  table.insert(4, 5);
+  assert_eq!(table.get(1), (2, true));
+  assert_eq!(table.get(2), (3, true));
+  assert_eq!(table.get(3), (4, true));
+  assert_eq!(table.get(4), (5, true));
+  assert_eq!(table.delete(1), (2, true));
+  assert_eq!(table.delete(2), (3, true));
+  assert_eq!(table.delete(3), (4, true));
+  assert_eq!(table.delete(4), (5, true));
+  assert_eq!(table.get(1), (0, false));
+  assert_eq!(table.get(2), (0, false));
+  assert_eq!(table.get(3), (0, false));
+  assert_eq!(table.get(4), (0, false));
+}
+
 #[bench]
 fn bench_std_map_insert(b: &mut Bencher) {
   let mut map = HashMap::new();
